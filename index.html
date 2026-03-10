@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTM Agent Signal Architecture — Recess</title>
+    <title>GTM Agent Architecture — Recess</title>
     <style>
         :root {
             --aqua: #14B9D6;
@@ -16,13 +16,10 @@
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
+            --purple: #8b5cf6;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -32,15 +29,9 @@
             padding: 2rem;
         }
         
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
         
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+        header { text-align: center; margin-bottom: 2rem; }
         
         h1 {
             font-size: 2.5rem;
@@ -51,178 +42,309 @@
             background-clip: text;
         }
         
-        .subtitle {
-            color: var(--muted);
-            font-size: 1.1rem;
-        }
+        .subtitle { color: var(--muted); font-size: 1.1rem; }
         
-        .question {
-            background: var(--card);
-            border: 1px solid var(--aqua);
-            border-radius: 12px;
-            padding: 1.5rem;
+        .core-principle {
+            background: linear-gradient(135deg, var(--card), rgba(20, 185, 214, 0.1));
+            border: 2px solid var(--aqua);
+            border-radius: 16px;
+            padding: 2rem;
             margin-bottom: 2rem;
             text-align: center;
         }
         
-        .question h2 {
+        .core-principle h2 {
             color: var(--aqua);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .core-principle .formula {
             font-size: 1.3rem;
+            color: var(--text);
+            margin: 1rem 0;
+        }
+        
+        .core-principle .formula span {
+            background: rgba(20, 185, 214, 0.2);
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            margin: 0 0.25rem;
+        }
+        
+        .trigger-box {
+            background: var(--dark);
+            border: 2px dashed var(--warning);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .trigger-box h3 {
+            color: var(--warning);
             margin-bottom: 0.5rem;
         }
         
-        .question p {
-            color: var(--muted);
+        .flow-section {
+            margin-bottom: 2rem;
         }
         
-        .architecture {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        @media (max-width: 1200px) {
-            .architecture {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .column {
+        .flow-section h2 {
+            color: var(--aqua);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
             display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            align-items: center;
+            gap: 0.5rem;
         }
         
-        .card {
+        .step-number {
+            background: var(--aqua);
+            color: var(--navy);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .context-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+        
+        .context-card {
             background: var(--card);
             border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+        }
+        
+        .context-card h4 {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+        
+        .context-card .icon { font-size: 1.2rem; }
+        
+        .context-card ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+        
+        .context-card li {
+            padding: 0.35rem 0;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .context-card li:last-child { border-bottom: none; }
+        
+        .context-card .source {
+            margin-top: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--aqua);
+            background: rgba(20, 185, 214, 0.1);
+            padding: 0.35rem 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .analysis-box {
+            background: var(--card);
+            border: 1px solid var(--purple);
             border-radius: 12px;
             padding: 1.5rem;
         }
         
-        .card h3 {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+        .analysis-box h4 {
+            color: var(--purple);
             margin-bottom: 1rem;
-            font-size: 1.1rem;
         }
         
-        .card h3 .icon {
-            font-size: 1.3rem;
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
         }
         
-        .signal-list {
+        .analysis-item h5 {
+            color: var(--text);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .analysis-item ul {
             list-style: none;
-        }
-        
-        .signal-list li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .signal-list li:last-child {
-            border-bottom: none;
-        }
-        
-        .signal-name {
-            font-weight: 500;
-        }
-        
-        .signal-value {
             font-size: 0.85rem;
             color: var(--muted);
         }
         
-        .badge {
-            font-size: 0.7rem;
-            padding: 0.15rem 0.5rem;
-            border-radius: 999px;
-            font-weight: 600;
-            text-transform: uppercase;
+        .analysis-item li { padding: 0.2rem 0; }
+        
+        .output-section {
+            background: linear-gradient(135deg, var(--card), rgba(16, 185, 129, 0.1));
+            border: 2px solid var(--success);
+            border-radius: 12px;
+            padding: 1.5rem;
         }
         
-        .badge-high {
-            background: rgba(16, 185, 129, 0.2);
+        .output-section h4 {
             color: var(--success);
+            margin-bottom: 1rem;
+            text-align: center;
         }
         
-        .badge-medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
+        .output-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
         }
         
-        .badge-low {
-            background: rgba(156, 163, 175, 0.2);
+        @media (max-width: 768px) {
+            .output-grid { grid-template-columns: 1fr; }
+        }
+        
+        .email-preview {
+            background: var(--dark);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .email-header {
+            background: var(--card);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .email-header .label {
+            font-size: 0.75rem;
             color: var(--muted);
         }
         
-        .badge-live {
+        .email-header .value {
+            font-size: 0.9rem;
+        }
+        
+        .email-body {
+            padding: 1rem;
+            font-size: 0.85rem;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+        
+        .email-body .highlight {
             background: rgba(20, 185, 214, 0.2);
             color: var(--aqua);
+            padding: 0 0.2rem;
+            border-radius: 2px;
         }
         
-        .badge-planned {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-        }
-        
-        .center-card {
-            background: linear-gradient(135deg, var(--card), rgba(20, 185, 214, 0.1));
-            border: 2px solid var(--aqua);
-        }
-        
-        .center-card h3 {
-            color: var(--aqua);
-            font-size: 1.3rem;
-            text-align: center;
-            justify-content: center;
-        }
-        
-        .flow-diagram {
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        .flow-step {
+        .reasoning-box {
             background: var(--dark);
-            border: 1px solid var(--border);
             border-radius: 8px;
             padding: 1rem;
-            margin: 1rem 0;
         }
         
-        .flow-step h4 {
+        .reasoning-box h5 {
+            color: var(--success);
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .reasoning-box p {
+            font-size: 0.85rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+        
+        .reasoning-box .signal-used {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--purple);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        
+        .arrow-down {
+            text-align: center;
+            padding: 1rem;
+            color: var(--aqua);
+            font-size: 2rem;
+        }
+        
+        .data-sources {
+            margin-top: 3rem;
+        }
+        
+        .data-sources h2 {
+            color: var(--aqua);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .unified-layer {
+            background: var(--card);
+            border: 2px solid var(--aqua);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .unified-layer h3 {
             color: var(--aqua);
             margin-bottom: 0.5rem;
         }
         
-        .arrow {
-            color: var(--aqua);
-            font-size: 1.5rem;
+        .unified-layer p {
+            color: var(--muted);
+            font-size: 0.9rem;
         }
         
-        .examples {
+        .source-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .source-card {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .source-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .source-card h4 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .source-card p { font-size: 0.8rem; color: var(--muted); }
+        
+        .source-card .sync {
+            margin-top: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--success);
+        }
+        
+        .example-section {
             margin-top: 3rem;
         }
         
-        .examples h2 {
+        .example-section h2 {
+            color: var(--aqua);
             text-align: center;
             margin-bottom: 1.5rem;
-            color: var(--aqua);
         }
         
-        .example-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-        
-        .example-card {
+        .example-full {
             background: var(--card);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -231,36 +353,117 @@
         
         .example-header {
             background: var(--dark);
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border);
         }
         
-        .example-header h4 {
-            color: var(--aqua);
-            margin-bottom: 0.25rem;
+        .example-header h3 { color: var(--aqua); margin-bottom: 0.25rem; }
+        .example-header p { color: var(--muted); font-size: 0.9rem; }
+        
+        .example-content {
+            padding: 1.5rem;
         }
         
-        .example-header .trigger {
+        .example-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        
+        @media (max-width: 900px) {
+            .example-grid-2 { grid-template-columns: 1fr; }
+        }
+        
+        .context-summary {
+            background: var(--dark);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .context-summary h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            color: var(--text);
+        }
+        
+        .context-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .context-item:last-child { border-bottom: none; }
+        .context-item .label { color: var(--muted); }
+        .context-item .value { color: var(--text); }
+        
+        .last-email {
+            background: var(--dark);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .last-email h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .last-email .email-text {
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-style: italic;
+            border-left: 2px solid var(--border);
+            padding-left: 0.75rem;
+        }
+        
+        .generated-email {
+            background: var(--dark);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .generated-email .header {
+            background: var(--card);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .generated-email .subject {
+            font-weight: 600;
+        }
+        
+        .generated-email .body {
+            padding: 1rem;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        
+        .reasoning-section {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid var(--purple);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .reasoning-section h4 {
+            color: var(--purple);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .reasoning-section p {
             font-size: 0.85rem;
             color: var(--muted);
         }
         
-        .example-signals {
-            padding: 1rem;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .example-signals h5 {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 0.5rem;
-        }
-        
-        .signal-tags {
+        .signals-used {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
+            margin-top: 0.75rem;
         }
         
         .signal-tag {
@@ -268,652 +471,410 @@
             color: var(--aqua);
             padding: 0.25rem 0.5rem;
             border-radius: 4px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
-        
-        .example-email {
-            padding: 1rem;
-            background: var(--dark);
-            font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
-            color: var(--muted);
-        }
-        
-        .example-email .subject {
-            color: var(--text);
-            margin-bottom: 0.5rem;
-        }
-        
-        .highlight {
-            background: rgba(20, 185, 214, 0.2);
-            color: var(--aqua);
-            padding: 0 0.25rem;
-            border-radius: 2px;
-        }
-        
-        .data-sources {
-            margin-top: 3rem;
-        }
-        
-        .data-sources h2 {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: var(--aqua);
-        }
-        
-        .source-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: var(--card);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-        
-        .source-table th,
-        .source-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .source-table th {
-            background: var(--dark);
-            color: var(--aqua);
-            font-weight: 600;
-        }
-        
-        .source-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 0.5rem;
-        }
-        
-        .status-dot.live { background: var(--success); }
-        .status-dot.planned { background: var(--warning); }
-        .status-dot.future { background: var(--muted); }
         
         footer {
             margin-top: 3rem;
             text-align: center;
             color: var(--muted);
             font-size: 0.9rem;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
         }
         
-        .footer-note {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-top: 1rem;
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-live {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+        
+        .status-planned {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎯 GTM Agent Signal Architecture</h1>
-            <p class="subtitle">How signals transform generic follow-ups into compelling, personalized outreach</p>
+            <h1>🎯 GTM Agent Architecture</h1>
+            <p class="subtitle">Context-First Email Generation for Stale Deals</p>
         </header>
         
-        <div class="question">
-            <h2>The Core Question</h2>
-            <p>What signals can we give the agent to write emails that are <strong>more relevant and unique</strong> than what a sales rep could write on their own?</p>
+        <div class="core-principle">
+            <h2>Core Principle</h2>
+            <div class="formula">
+                <span>Full Context</span> + <span>Situation Analysis</span> + <span>Signal Enhancement</span> = <span>Compelling Email</span>
+            </div>
+            <p style="color: var(--muted); margin-top: 1rem;">
+                Understand the complete deal story first, then use signals to craft the perfect next message.
+            </p>
         </div>
         
-        <div class="architecture">
-            <!-- Left Column: Data Sources -->
-            <div class="column">
-                <div class="card">
-                    <h3><span class="icon">🗄️</span> HubSpot (BigQuery)</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">Deal Score & Tier</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Days in Stage</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Last Email Date</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Email Reply Status</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Meeting Count</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Deal Owner</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Company Target Account</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3><span class="icon">🍃</span> MongoDB (BigQuery)</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">Past Offers & Status</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Campaign History</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Event Recaps & NPS</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Platform Activity</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Supplier Performance</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3><span class="icon">💰</span> QuickBooks (BigQuery)</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">Invoice History</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Payment Timing</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Total LTV</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">NRR Trend</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Contract Spend</span>
-                            <span class="badge badge-live">Live</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+        <div class="trigger-box">
+            <h3>⏰ Trigger</h3>
+            <p style="font-size: 1.2rem;">Deal with <strong>7+ days</strong> without activity</p>
+            <p style="color: var(--muted); font-size: 0.9rem;">Daily scan of both Buyer and Supplier pipelines</p>
+        </div>
+        
+        <!-- STEP 1: GATHER CONTEXT -->
+        <div class="flow-section">
+            <h2><span class="step-number">1</span> Gather Complete Deal Context</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem;">"What's the full story of this deal?"</p>
             
-            <!-- Center Column: Agent -->
-            <div class="column">
-                <div class="card center-card">
-                    <h3><span class="icon">🤖</span> GTM Signal Agent</h3>
-                    <div class="flow-diagram">
-                        <div class="flow-step">
-                            <h4>1. Signal Detection</h4>
-                            <p>Scan all sources for actionable triggers</p>
-                        </div>
-                        <div class="arrow">↓</div>
-                        <div class="flow-step">
-                            <h4>2. Context Assembly</h4>
-                            <p>Aggregate relevant signals per contact</p>
-                        </div>
-                        <div class="arrow">↓</div>
-                        <div class="flow-step">
-                            <h4>3. Angle Selection</h4>
-                            <p>Choose compelling hook based on signals</p>
-                        </div>
-                        <div class="arrow">↓</div>
-                        <div class="flow-step">
-                            <h4>4. Draft Generation</h4>
-                            <p>Write personalized email with reasoning</p>
-                        </div>
-                        <div class="arrow">↓</div>
-                        <div class="flow-step">
-                            <h4>5. Human Review</h4>
-                            <p>Slack approval → SmartLead send</p>
-                        </div>
-                    </div>
+            <div class="context-grid">
+                <div class="context-card">
+                    <h4><span class="icon">📊</span> Deal State</h4>
+                    <ul>
+                        <li>Current stage & requirements to advance</li>
+                        <li>Deal value & tier (A/B/C)</li>
+                        <li>Days in current stage</li>
+                        <li>Deal owner & team</li>
+                        <li>Deal score & momentum</li>
+                    </ul>
+                    <div class="source">📍 HubSpot + BigQuery (deal_scores)</div>
                 </div>
                 
-                <div class="card">
-                    <h3><span class="icon">⚡</span> Signal Categories</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">🎯 Timing Signals</span>
-                            <span class="signal-value">When to reach out</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">📊 Relationship Signals</span>
-                            <span class="signal-value">History & context</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">🔥 Urgency Signals</span>
-                            <span class="signal-value">Why now matters</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">🎁 Value Signals</span>
-                            <span class="signal-value">What to offer</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">📰 News Signals</span>
-                            <span class="signal-value">External triggers</span>
-                        </li>
+                <div class="context-card">
+                    <h4><span class="icon">📧</span> Email History</h4>
+                    <ul>
+                        <li>Last email WE sent (full text)</li>
+                        <li>Last email THEY sent (if any)</li>
+                        <li>Full thread context</li>
+                        <li>Unanswered questions</li>
+                        <li>Promises we made</li>
                     </ul>
+                    <div class="source">📍 HubSpot Engagements + Gmail</div>
+                </div>
+                
+                <div class="context-card">
+                    <h4><span class="icon">📄</span> Proposal Details</h4>
+                    <ul>
+                        <li>What we proposed (scope, venues)</li>
+                        <li>Pricing & terms offered</li>
+                        <li>Timeline proposed</li>
+                        <li>Custom requirements addressed</li>
+                    </ul>
+                    <div class="source">📍 HubSpot Documents <span class="status-badge status-planned">Planned</span></div>
+                </div>
+                
+                <div class="context-card">
+                    <h4><span class="icon">🎙️</span> Meeting Context</h4>
+                    <ul>
+                        <li>Recent meeting summaries</li>
+                        <li>Key topics discussed</li>
+                        <li>Objections raised</li>
+                        <li>Their action items</li>
+                        <li>Decision makers identified</li>
+                    </ul>
+                    <div class="source">📍 Fireflies (Airtable) <span class="status-badge status-planned">Planned</span></div>
+                </div>
+                
+                <div class="context-card">
+                    <h4><span class="icon">🤝</span> Relationship History</h4>
+                    <ul>
+                        <li>Past campaigns & results</li>
+                        <li>Total LTV / spend</li>
+                        <li>NPS / satisfaction scores</li>
+                        <li>Previous deal outcomes</li>
+                    </ul>
+                    <div class="source">📍 MongoDB + QuickBooks (BigQuery)</div>
+                </div>
+                
+                <div class="context-card">
+                    <h4><span class="icon">🏢</span> Company Intelligence</h4>
+                    <ul>
+                        <li>Quarterly earnings themes</li>
+                        <li>Recent company news</li>
+                        <li>Leadership changes</li>
+                        <li>Budget cycles / fiscal year</li>
+                        <li>Competitive landscape</li>
+                    </ul>
+                    <div class="source">📍 BigQuery Research + Clay (via HubSpot)</div>
                 </div>
             </div>
+        </div>
+        
+        <div class="arrow-down">↓</div>
+        
+        <!-- STEP 2: ANALYZE -->
+        <div class="flow-section">
+            <h2><span class="step-number">2</span> Analyze the Situation</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem;">"What's really going on here? Why did they go quiet?"</p>
             
-            <!-- Right Column: Additional Sources -->
-            <div class="column">
-                <div class="card">
-                    <h3><span class="icon">🔬</span> Clay Enrichment</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">Recent Funding</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Leadership Changes</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Product Launches</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Tech Stack</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Company News</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3><span class="icon">🎙️</span> Fireflies (Airtable)</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">Meeting Transcripts</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Action Items</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Pain Points Discussed</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Objections Raised</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3><span class="icon">📧</span> Email History (Gmail)</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">Last Thread Context</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Unanswered Questions</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Promised Follow-ups</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                    </ul>
-                </div>
-                
-                <div class="card">
-                    <h3><span class="icon">💬</span> Slack Context</h3>
-                    <ul class="signal-list">
-                        <li>
-                            <span class="signal-name">Internal Notes</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                        <li>
-                            <span class="signal-name">Deal Discussions</span>
-                            <span class="badge badge-planned">Planned</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        
-        <div class="examples">
-            <h2>📝 Signal-Driven Email Examples</h2>
-            <div class="example-grid">
-                <div class="example-card">
-                    <div class="example-header">
-                        <h4>🔥 High-Value Stale Deal</h4>
-                        <span class="trigger">Trigger: A-tier deal, 10 days no contact, previous campaign success</span>
+            <div class="analysis-box">
+                <h4>🧠 Situation Analysis Questions</h4>
+                <div class="analysis-grid">
+                    <div class="analysis-item">
+                        <h5>Why did they go quiet?</h5>
+                        <ul>
+                            <li>□ Waiting on internal approval?</li>
+                            <li>□ Budget timing issue?</li>
+                            <li>□ Evaluating competitors?</li>
+                            <li>□ Wrong stakeholder?</li>
+                            <li>□ Priority shifted?</li>
+                            <li>□ Just busy / forgot?</li>
+                        </ul>
                     </div>
-                    <div class="example-signals">
-                        <h5>Signals Detected</h5>
-                        <div class="signal-tags">
-                            <span class="signal-tag">Deal Score: 67 (A-tier)</span>
-                            <span class="signal-tag">Last Email: 10 days ago</span>
-                            <span class="signal-tag">Past Campaign: 92% satisfaction</span>
-                            <span class="signal-tag">NRR: 140%</span>
-                        </div>
+                    <div class="analysis-item">
+                        <h5>What's blocking next stage?</h5>
+                        <ul>
+                            <li>□ Need more information?</li>
+                            <li>□ Need executive buy-in?</li>
+                            <li>□ Need ROI proof?</li>
+                            <li>□ Need pricing flexibility?</li>
+                            <li>□ Need timeline adjustment?</li>
+                        </ul>
                     </div>
-                    <div class="example-email">
-                        <div class="subject">Subject: Quick question about Q2 sampling</div>
-                        <br>
-                        Hi Sarah,<br><br>
-                        Hope the <span class="highlight">Whole Foods activation</span> wrapped up well — I saw the <span class="highlight">92% satisfaction score</span> from the organizers, which is excellent.<br><br>
-                        I wanted to check in on the Q2 sampling campaign we discussed. Given how well Q1 performed, I have a few <span class="highlight">high-performing venues</span> that just opened up in the same DMAs.<br><br>
-                        Worth a quick call this week?
+                    <div class="analysis-item">
+                        <h5>What leverage do we have?</h5>
+                        <ul>
+                            <li>□ Past success to reference?</li>
+                            <li>□ New inventory they'd want?</li>
+                            <li>□ Company news to hook on?</li>
+                            <li>□ Deadline/urgency to create?</li>
+                            <li>□ Relationship to lean on?</li>
+                        </ul>
                     </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-header">
-                        <h4>📰 Company News Trigger</h4>
-                        <span class="trigger">Trigger: Clay detected product launch, existing relationship</span>
-                    </div>
-                    <div class="example-signals">
-                        <h5>Signals Detected</h5>
-                        <div class="signal-tags">
-                            <span class="signal-tag">News: New product launch</span>
-                            <span class="signal-tag">Past Campaigns: 3</span>
-                            <span class="signal-tag">Total LTV: $45K</span>
-                            <span class="signal-tag">Last Contact: 21 days</span>
-                        </div>
-                    </div>
-                    <div class="example-email">
-                        <div class="subject">Subject: Congrats on the new sparkling line!</div>
-                        <br>
-                        Hi Marcus,<br><br>
-                        Just saw the announcement about <span class="highlight">AquaFresh Sparkling</span> — exciting expansion into a hot category.<br><br>
-                        We've helped similar brands (<span class="highlight">Hint, Spindrift</span>) drive trial for new SKUs through targeted sampling at fitness events. Given your past success with us (<span class="highlight">3 campaigns, 180K samples</span>), wanted to see if sampling is part of the launch plan.<br><br>
-                        Happy to share some ideas.
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-header">
-                        <h4>⏰ Contract Expiring</h4>
-                        <span class="trigger">Trigger: Contract ends in 30 days, budget remaining</span>
-                    </div>
-                    <div class="example-signals">
-                        <h5>Signals Detected</h5>
-                        <div class="signal-tags">
-                            <span class="signal-tag">Contract Ends: 30 days</span>
-                            <span class="signal-tag">Budget Remaining: $12K</span>
-                            <span class="signal-tag">Utilization: 76%</span>
-                            <span class="signal-tag">Avg Offer Acceptance: 89%</span>
-                        </div>
-                    </div>
-                    <div class="example-email">
-                        <div class="subject">Subject: $12K remaining before March 31</div>
-                        <br>
-                        Hi Jennifer,<br><br>
-                        Quick heads up — your annual contract wraps on <span class="highlight">March 31st</span> with <span class="highlight">$12,000 remaining</span>.<br><br>
-                        I've identified <span class="highlight">8 events</span> in your target DMAs between now and then that would fully utilize the budget. Given your <span class="highlight">89% acceptance rate</span> this year, these should be strong fits.<br><br>
-                        Want me to send over the recommendations?
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-header">
-                        <h4>🎤 Meeting Context Follow-up</h4>
-                        <span class="trigger">Trigger: Meeting 5 days ago, no follow-up, objection detected</span>
-                    </div>
-                    <div class="example-signals">
-                        <h5>Signals Detected</h5>
-                        <div class="signal-tags">
-                            <span class="signal-tag">Meeting: 5 days ago</span>
-                            <span class="signal-tag">Objection: "budget timing"</span>
-                            <span class="signal-tag">Action Item: "send case study"</span>
-                            <span class="signal-tag">Competitor Mentioned: Sampler</span>
-                        </div>
-                    </div>
-                    <div class="example-email">
-                        <div class="subject">Subject: The case study you asked about</div>
-                        <br>
-                        Hi David,<br><br>
-                        Great chatting last week. As promised, here's the <span class="highlight">KIND Snacks case study</span> showing how they structured <span class="highlight">Q1 budget allocation</span> to test before committing to larger spend.<br><br>
-                        I know you mentioned <span class="highlight">budget timing</span> was the main constraint — this shows how other brands approached the same situation.<br><br>
-                        Let me know if questions come up.
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-header">
-                        <h4>🏃 Supplier Re-engagement</h4>
-                        <span class="trigger">Trigger: High-performing supplier, no new listings in 60 days</span>
-                    </div>
-                    <div class="example-signals">
-                        <h5>Signals Detected</h5>
-                        <div class="signal-tags">
-                            <span class="signal-tag">Supplier NPS: 4.8/5</span>
-                            <span class="signal-tag">Past Offers: 23 accepted</span>
-                            <span class="signal-tag">Avg Payout: $850</span>
-                            <span class="signal-tag">Last Listing: 62 days</span>
-                        </div>
-                    </div>
-                    <div class="example-email">
-                        <div class="subject">Subject: Brands asking about your venues</div>
-                        <br>
-                        Hi Rachel,<br><br>
-                        I've had <span class="highlight">3 brands</span> this month looking for fitness studios in the Bay Area — your venues always perform well (<span class="highlight">4.8 avg rating, 23 successful campaigns</span>).<br><br>
-                        Noticed your spring calendar isn't up yet. Any new dates opening up? I can match you with requests immediately.<br><br>
-                        Happy to jump on a quick call to review demand.
-                    </div>
-                </div>
-                
-                <div class="example-card">
-                    <div class="example-header">
-                        <h4>📊 Deal Score Drop Alert</h4>
-                        <span class="trigger">Trigger: Deal score dropped 15+ points in 7 days</span>
-                    </div>
-                    <div class="example-signals">
-                        <h5>Signals Detected</h5>
-                        <div class="signal-tags">
-                            <span class="signal-tag">Score Change: 58 → 41</span>
-                            <span class="signal-tag">Tier Change: A → B</span>
-                            <span class="signal-tag">No Reply: 2 emails</span>
-                            <span class="signal-tag">Canceled Meeting: Yes</span>
-                        </div>
-                    </div>
-                    <div class="example-email">
-                        <div class="subject">Subject: Checking in — still a fit?</div>
-                        <br>
-                        Hi Tom,<br><br>
-                        I noticed we had to reschedule our call last week, and I wanted to make sure the timing still works on your end.<br><br>
-                        If priorities have shifted, totally understand — just let me know and I can follow up when it makes more sense. No need to ghost. 😊<br><br>
-                        Either way, here when you're ready.
+                    <div class="analysis-item">
+                        <h5>What's the right approach?</h5>
+                        <ul>
+                            <li>□ Provide value / ammo for internal sell?</li>
+                            <li>□ Create urgency?</li>
+                            <li>□ Offer flexibility?</li>
+                            <li>□ Direct ask for decision?</li>
+                            <li>□ Light touch / easy out?</li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
         
+        <div class="arrow-down">↓</div>
+        
+        <!-- STEP 3: GENERATE -->
+        <div class="flow-section">
+            <h2><span class="step-number">3</span> Craft the Perfect Next Email</h2>
+            <p style="color: var(--muted); margin-bottom: 1rem;">"What's the one email that moves this deal forward?"</p>
+            
+            <div class="output-section">
+                <h4>📤 Output to Slack for Rep Approval</h4>
+                <div class="output-grid">
+                    <div>
+                        <div class="email-preview">
+                            <div class="email-header">
+                                <div class="label">Subject:</div>
+                                <div class="value">Quick ROI summary for your March 15 review</div>
+                            </div>
+                            <div class="email-body">
+                                Hi Sarah,<br><br>
+                                I know <span class="highlight">budget approvals are coming up</span>, so I put together a quick one-pager summarizing the results from your <span class="highlight">past two campaigns</span> with us:<br><br>
+                                • 87% organizer satisfaction<br>
+                                • 12,000 samples distributed<br>
+                                • $2.31 cost per trial (vs. $4-6 industry avg)<br><br>
+                                Given the <span class="highlight">new protein bar launch</span>, timing on Q2 fitness events is tight — happy to hold the 15 Bay Area dates through Friday if that helps your internal timeline.<br><br>
+                                Let me know if you need anything else for the March 15 review.
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="reasoning-box">
+                            <h5>💡 Why This Approach</h5>
+                            <p><strong>Context:</strong> Sarah mentioned needing to prove ROI for budget approval by March 15. Proposal sent 12 days ago, no response.</p>
+                            <p><strong>Strategy:</strong> Rather than generic follow-up, provide ammunition (past results) she can use internally. Light deadline creates action without pressure.</p>
+                            <p><strong>Signals Used:</strong></p>
+                            <div class="signal-used">Past campaign results (87% NPS)</div>
+                            <div class="signal-used">Meeting note: "March 15 budget deadline"</div>
+                            <div class="signal-used">Company news: New product launch</div>
+                        </div>
+                        <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button style="flex: 1; padding: 0.75rem; background: var(--success); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">✅ Approve</button>
+                            <button style="flex: 1; padding: 0.75rem; background: var(--warning); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">✏️ Edit</button>
+                            <button style="flex: 1; padding: 0.75rem; background: var(--border); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600;">❌ Skip</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- DATA SOURCES -->
         <div class="data-sources">
-            <h2>📊 Complete Signal Source Matrix</h2>
-            <table class="source-table">
-                <thead>
-                    <tr>
-                        <th>Signal Category</th>
-                        <th>Specific Signal</th>
-                        <th>Source</th>
-                        <th>Query Path</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td rowspan="5"><strong>Engagement</strong></td>
-                        <td>Days since last email sent</td>
-                        <td>HubSpot</td>
-                        <td><code>engagement_email</code> + <code>engagement_deal</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Reply received (yes/no)</td>
-                        <td>HubSpot</td>
-                        <td><code>engagement_email.property_hs_email_direction = 'INCOMING_EMAIL'</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Meeting count (30/60/90 days)</td>
-                        <td>HubSpot</td>
-                        <td><code>engagement_meeting</code> + <code>engagement_deal</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Meeting transcripts</td>
-                        <td>Fireflies/Airtable</td>
-                        <td>Airtable API → search by contact email</td>
-                        <td><span class="status-dot planned"></span>Planned</td>
-                    </tr>
-                    <tr>
-                        <td>Email thread context</td>
-                        <td>Gmail</td>
-                        <td><code>gog gmail search</code></td>
-                        <td><span class="status-dot planned"></span>Planned</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="4"><strong>Deal Health</strong></td>
-                        <td>Deal score (0-100)</td>
-                        <td>BigQuery</td>
-                        <td><code>analytics.combined_deal_scores</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Deal score tier (A-F)</td>
-                        <td>BigQuery</td>
-                        <td><code>analytics.combined_deal_scores.deal_score_tier</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Days in current stage</td>
-                        <td>HubSpot</td>
-                        <td><code>deal.property_hs_date_entered_*</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Score change (7-day delta)</td>
-                        <td>BigQuery</td>
-                        <td><code>analytics.deal_score_changes</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="4"><strong>Relationship</strong></td>
-                        <td>Total LTV</td>
-                        <td>BigQuery</td>
-                        <td><code>App_KPI_Dashboard.net_revenue_retention_all_customers.total_ltv</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>NRR trend</td>
-                        <td>BigQuery</td>
-                        <td><code>net_revenue_retention_all_customers.nrr_*</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Past campaign count</td>
-                        <td>MongoDB</td>
-                        <td><code>mongodb.offers WHERE aasm_state = 'accepted'</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Avg satisfaction score</td>
-                        <td>MongoDB</td>
-                        <td><code>mongodb.recaps</code> (NPS field)</td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3"><strong>Timing</strong></td>
-                        <td>Contract end date</td>
-                        <td>HubSpot</td>
-                        <td><code>deal.property_end_of_term</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Budget remaining</td>
-                        <td>BigQuery</td>
-                        <td><code>App_KPI_Dashboard.Upfront_Contract_Spend_Query</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Upcoming event dates</td>
-                        <td>MongoDB</td>
-                        <td><code>mongodb.audience_listings</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="4"><strong>External</strong></td>
-                        <td>Recent funding</td>
-                        <td>Clay</td>
-                        <td>Clay API → HubSpot custom property</td>
-                        <td><span class="status-dot planned"></span>Planned</td>
-                    </tr>
-                    <tr>
-                        <td>Leadership changes</td>
-                        <td>Clay</td>
-                        <td>Clay API → HubSpot custom property</td>
-                        <td><span class="status-dot planned"></span>Planned</td>
-                    </tr>
-                    <tr>
-                        <td>Product launches</td>
-                        <td>Clay</td>
-                        <td>Clay API → HubSpot custom property</td>
-                        <td><span class="status-dot planned"></span>Planned</td>
-                    </tr>
-                    <tr>
-                        <td>Company news</td>
-                        <td>Clay</td>
-                        <td>Clay API → HubSpot custom property</td>
-                        <td><span class="status-dot planned"></span>Planned</td>
-                    </tr>
-                    <tr>
-                        <td rowspan="3"><strong>Platform Activity</strong></td>
-                        <td>Last platform login</td>
-                        <td>MongoDB</td>
-                        <td><code>recess_stagging.events WHERE type = 'login'</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Offers viewed (not submitted)</td>
-                        <td>MongoDB</td>
-                        <td><code>recess_stagging.events WHERE type = 'offer_viewed'</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                    <tr>
-                        <td>Cart abandonment</td>
-                        <td>MongoDB</td>
-                        <td><code>mongodb.offers WHERE aasm_state = 'draft'</code></td>
-                        <td><span class="status-dot live"></span>Ready</td>
-                    </tr>
-                </tbody>
-            </table>
+            <h2>📊 Unified Data Layer (BigQuery)</h2>
+            
+            <div class="unified-layer">
+                <h3>BigQuery = Single Source of Truth</h3>
+                <p>All context sources flow into BigQuery for unified querying</p>
+            </div>
+            
+            <div class="source-grid">
+                <div class="source-card">
+                    <div class="icon">🗄️</div>
+                    <h4>HubSpot</h4>
+                    <p>Deals, Contacts, Companies, Engagements, Documents</p>
+                    <div class="sync">✓ Fivetran real-time sync</div>
+                </div>
+                <div class="source-card">
+                    <div class="icon">🍃</div>
+                    <h4>MongoDB</h4>
+                    <p>Offers, Campaigns, Events, Recaps, Platform Activity</p>
+                    <div class="sync">✓ Stitch Data sync</div>
+                </div>
+                <div class="source-card">
+                    <div class="icon">💰</div>
+                    <h4>QuickBooks</h4>
+                    <p>Invoices, Payments, LTV, NRR</p>
+                    <div class="sync">✓ Fivetran real-time sync</div>
+                </div>
+                <div class="source-card">
+                    <div class="icon">🔬</div>
+                    <h4>Clay</h4>
+                    <p>Job Changes, News, Enrichment</p>
+                    <div class="sync">✓ Via HubSpot → Fivetran</div>
+                </div>
+                <div class="source-card">
+                    <div class="icon">📊</div>
+                    <h4>Company Research</h4>
+                    <p>Quarterly Earnings, Priorities, Budget Cycles</p>
+                    <div class="sync">✓ BigQuery native</div>
+                </div>
+                <div class="source-card">
+                    <div class="icon">🎙️</div>
+                    <h4>Fireflies</h4>
+                    <p>Meeting Transcripts, Action Items</p>
+                    <div class="sync" style="color: var(--warning);">○ Planned: Airtable API</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- FULL EXAMPLE -->
+        <div class="example-section">
+            <h2>📝 Full Example: Context → Analysis → Email</h2>
+            
+            <div class="example-full">
+                <div class="example-header">
+                    <h3>Deal: Acme Foods Q2 Sampling Campaign</h3>
+                    <p>Trigger: 12 days since last activity, Proposal stage</p>
+                </div>
+                
+                <div class="example-content">
+                    <div class="example-grid-2">
+                        <div>
+                            <div class="context-summary">
+                                <h4>📋 Context Gathered</h4>
+                                <div class="context-item">
+                                    <span class="label">Stage:</span>
+                                    <span class="value">Proposal Sent (12 days)</span>
+                                </div>
+                                <div class="context-item">
+                                    <span class="label">Deal Value:</span>
+                                    <span class="value">$45,000 (A-tier)</span>
+                                </div>
+                                <div class="context-item">
+                                    <span class="label">Contact:</span>
+                                    <span class="value">Sarah Chen, Brand Manager</span>
+                                </div>
+                                <div class="context-item">
+                                    <span class="label">Past Campaigns:</span>
+                                    <span class="value">2 (87% satisfaction)</span>
+                                </div>
+                                <div class="context-item">
+                                    <span class="label">Total LTV:</span>
+                                    <span class="value">$28,000</span>
+                                </div>
+                            </div>
+                            
+                            <div class="last-email">
+                                <h4>📧 Last Email From Them (14 days ago)</h4>
+                                <div class="email-text">
+                                    "Thanks for the proposal! I'll review with my team and get back to you."
+                                </div>
+                            </div>
+                            
+                            <div class="last-email">
+                                <h4>🎙️ Meeting Notes (3 weeks ago)</h4>
+                                <div class="email-text">
+                                    • Interested in fitness + university events<br>
+                                    • Concerned about proving ROI to leadership<br>
+                                    • Q2 budget needs approval by March 15<br>
+                                    • Mentioned Sampler is also pitching
+                                </div>
+                            </div>
+                            
+                            <div class="last-email">
+                                <h4>📰 Company Intelligence</h4>
+                                <div class="email-text">
+                                    • Q4 earnings: "doubling experiential marketing"<br>
+                                    • Just launched new protein bar SKU<br>
+                                    • New VP Marketing started 2 months ago
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="context-summary" style="background: rgba(139, 92, 246, 0.1); border: 1px solid var(--purple);">
+                                <h4 style="color: var(--purple);">🧠 Situation Analysis</h4>
+                                <div class="context-item">
+                                    <span class="label">Why quiet:</span>
+                                    <span class="value">Waiting on budget approval (March 15)</span>
+                                </div>
+                                <div class="context-item">
+                                    <span class="label">Blocker:</span>
+                                    <span class="value">Needs to prove ROI internally</span>
+                                </div>
+                                <div class="context-item">
+                                    <span class="label">Leverage:</span>
+                                    <span class="value">Past success, new product timing</span>
+                                </div>
+                                <div class="context-item">
+                                    <span class="label">Approach:</span>
+                                    <span class="value">Provide ammo, light urgency</span>
+                                </div>
+                            </div>
+                            
+                            <div class="generated-email" style="margin-top: 1rem;">
+                                <div class="header">
+                                    <div style="font-size: 0.75rem; color: var(--muted);">Generated Email:</div>
+                                    <div class="subject">Subject: Quick ROI summary for your March 15 review</div>
+                                </div>
+                                <div class="body" style="color: var(--text);">
+                                    Hi Sarah,<br><br>
+                                    I know budget approvals are coming up, so I put together a quick one-pager summarizing the results from your past two campaigns with us:<br><br>
+                                    • 87% organizer satisfaction<br>
+                                    • 12,000 samples distributed<br>
+                                    • $2.31 cost per trial (vs. $4-6 industry avg)<br><br>
+                                    Given the new protein bar launch, timing on Q2 fitness events is tight — happy to hold the 15 Bay Area dates through Friday if that helps your internal timeline.<br><br>
+                                    Let me know if you need anything else for the March 15 review.
+                                </div>
+                            </div>
+                            
+                            <div class="reasoning-section">
+                                <h4>💡 Agent Reasoning</h4>
+                                <p>"Sarah mentioned needing to prove ROI for budget approval by March 15. Rather than a generic follow-up, I'm providing specific ammunition (past results) she can use internally. The new product launch creates natural urgency. Light deadline (hold through Friday) creates action without pressure."</p>
+                                <div class="signals-used">
+                                    <span class="signal-tag">Meeting note: March 15 deadline</span>
+                                    <span class="signal-tag">Past results: 87% NPS</span>
+                                    <span class="signal-tag">News: protein bar launch</span>
+                                    <span class="signal-tag">Relationship: 2 past campaigns</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <footer>
-            <p>GTM Signal Agent Architecture v1.0 — Recess Digital</p>
-            <div class="footer-note">
-                <strong>Next Steps:</strong> Review signal priorities with team → Finalize V1 signal set → Build prototype with HubSpot + BigQuery signals → Add Clay/Fireflies in V2
-            </div>
+            <p><strong>GTM Agent Architecture v2.0</strong> — Recess Digital</p>
+            <p style="margin-top: 0.5rem;">Context First → Analyze Situation → Signals Enhance → Compelling Email</p>
         </footer>
     </div>
 </body>
